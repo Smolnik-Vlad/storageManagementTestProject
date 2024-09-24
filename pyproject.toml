@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "storagemanagement"
+version = "0.1.0"
+description = ""
+authors = ["mashaBurdo <masha.burdo@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.115.0"
+uvicorn = "^0.30.6"
+alembic = "^1.13.2"
+asyncpg = "^0.29.0"
+pydantic = "^2.9.2"
+sqlalchemy = "^2.0.35"
+pydantic-settings = "^2.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
