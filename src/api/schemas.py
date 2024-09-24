@@ -3,12 +3,30 @@ from pydantic import BaseModel, field_validator, conint, ConfigDict
 from src.core.exceptions import InvalidRequestDataException
 
 
+class OrderItemsResponseModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    product_id: int
+    count: int
+
+
 class OrderCreateResponseModel(BaseModel):
-    pass
+    model_config = ConfigDict(from_attributes=True)
+
+    order_id: int
+    list_of_orderItems: list[OrderItemsResponseModel]
+
+
+class OrderCreateUnsuccessfulResponseModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    list_of_ids_of_non_exist_products: list[int]
+    list_of_undercount_products: list[int]
 
 
 class OrderCreateRequestModel(BaseModel):
-    pass
+    product_id: int
+    count: int = conint(ge=1)(1)
 
 
 class ProductCreateRequestModel(BaseModel):

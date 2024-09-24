@@ -17,3 +17,27 @@ class ProductDataClass(DataClassFunctionality):
     description: str | None = None
     price: float = 0.0
     count: int = 0
+
+
+@dataclass
+class CreateOrderDataClass(DataClassFunctionality):
+    product_id: int
+    count: int
+
+
+@dataclass
+class UnsuccessfulOrderCreateDataClass(DataClassFunctionality):
+    list_of_ids_of_non_exist_products: list[int]
+    list_of_undercount_products: list[int]
+
+
+@dataclass
+class NewOrderItemDataClass(DataClassFunctionality):
+    product_id: int
+    count: int
+
+
+@dataclass
+class NewSavedOrderDataClass(DataClassFunctionality):
+    order_id: int
+    list_of_orderItems: list[NewOrderItemDataClass]

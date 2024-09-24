@@ -15,3 +15,11 @@ class ProductRepository(ABC):
     @abstractmethod
     async def get_product_by_id(self, product_id: int) -> ProductDataClass:
         pass
+
+    @abstractmethod
+    async def update_product_by_id(self, product_id: int, product: ProductDataClass) -> ProductDataClass:
+        pass
+
+    @abstractmethod
+    async def get_products_by_ids(self, prod_ids: list[int]) -> list[ProductDataClass]:
+        pass

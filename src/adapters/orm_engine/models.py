@@ -54,6 +54,7 @@ class Order(Base):
 class OrderItem(Base):
     __tablename__ = 'order_item'
     order_item_id: Mapped[int] = mapped_column(primary_key=True, unique=True, nullable=False, autoincrement=True)
+    product_count: Mapped[int]
     product_id: Mapped[int | None] = mapped_column(ForeignKey("product.product_id", ondelete="CASCADE"))
     order_id: Mapped[int] = mapped_column(ForeignKey("order.order_id", ondelete="CASCADE"))
 

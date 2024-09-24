@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import exc, select
+from sqlalchemy import exc, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.adapters.orm_engine.models import Product
@@ -40,7 +40,6 @@ class SQLAlchemyProductRepository(ProductRepository):
     async def get_all_products(self) -> list[ProductDataClass]:
         try:
             query = select(Product)
-            print(query)
             db_response = await self._db_session.execute(query)
             result = db_response.scalars().all()
             return [self.__from_model_to_dataclass(prod) for prod in result]
@@ -48,4 +47,34 @@ class SQLAlchemyProductRepository(ProductRepository):
             raise DatabaseException
 
     async def get_product_by_id(self, product_id: int) -> ProductDataClass:
-        pass
+        try:
+            query = select(Product).where(Product.product_id == product_id)
+            db_response = await self._db_session.execute(query)
+            result = db_response.scalar()
+            return self.__from_model_to_dataclass(result) if result else None
+        except exc.SQLAlchemyError:
+            raise DatabaseException
+
+    async def update_product_by_id(self, product_id: int, product: ProductDataClass) -> ProductDataClass:
+        try:
+            query = (update(Product)
+                     .where(Product.product_id == product_id)
+                     .values(**product.to_dict())
+                     .returning(Product))
+            res_database = await self._db_session.execute(query)
+            result = res_database.scalar()
+            user_result = self.__from_model_to_dataclass(result)
+            return user_result
+
+        except exc.SQLAlchemyError:
+            raise DatabaseException
+
+    async def get_products_by_ids(self, prod_ids: list[int]) -> list[ProductDataClass]:
+        try:
+            query = select(Product).where(Product.product_id.in_(prod_ids))
+            db_response = await self._db_session.execute(query)
+            result = db_response.scalars().all()
+            return [self.__from_model_to_dataclass(prod) for prod in result]
+        except exc.SQLAlchemyError:
+            raise DatabaseException
+

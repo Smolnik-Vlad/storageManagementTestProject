@@ -23,13 +23,15 @@ def get_SQLAlchemyProductRepository(db: AsyncSession = Depends(get_db)) -> Produ
     return SQLAlchemyProductRepository(_db_session=db)
 
 
-def get_SQLAlchemyOrderItemRepository(db: AsyncSession = Depends(get_db)) -> OrderItemRepository:
-    return SQLAlchemyOrderItemRepository(_db_session=db)
+# def get_SQLAlchemyOrderItemRepository(db: AsyncSession = Depends(get_db)) -> OrderItemRepository:
+#     return SQLAlchemyOrderItemRepository(_db_session=db)
 
 
-def get_order_use_case(order_repo=Depends(get_SQLAlchemyOrderRepository)) -> OrderUseCase:
+def get_order_use_case(order_repo=Depends(get_SQLAlchemyOrderRepository),
+                       product_repo=Depends(get_SQLAlchemyProductRepository)) -> OrderUseCase:
     return OrderUseCase(
-        _order_repository=order_repo
+        _order_repository=order_repo,
+        _product_repository=product_repo
     )
 
 
@@ -39,12 +41,12 @@ def get_product_use_case(product_repo=Depends(get_SQLAlchemyProductRepository)) 
     )
 
 
-def get_orderItem_use_case(order_repo=Depends(get_SQLAlchemyOrderItemRepository)) -> OrderItemUseCase:
-    return OrderItemUseCase(
-        _orderItem_repository=order_repo
-    )
+# def get_orderItem_use_case(order_repo=Depends(get_SQLAlchemyOrderItemRepository)) -> OrderItemUseCase:
+#     return OrderItemUseCase(
+#         _orderItem_repository=order_repo
+#     )
 
 
 OrderUseCaseDependency = Annotated[OrderUseCase, Depends(get_order_use_case)]
-OrderItemUseCaseDependency = Annotated[OrderItemUseCase, Depends(get_orderItem_use_case)]
+# OrderItemUseCaseDependency = Annotated[OrderItemUseCase, Depends(get_orderItem_use_case)]
 ProductUseCaseDependency = Annotated[ProductUseCase, Depends(get_product_use_case)]
