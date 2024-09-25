@@ -126,4 +126,3 @@ class SQLAlchemyOrderRepository(OrderRepository):
             ) if order_data else None
         except exc.SQLAlchemyError:
             raise DatabaseException
-
