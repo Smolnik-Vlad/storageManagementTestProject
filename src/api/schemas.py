@@ -1,4 +1,6 @@
-from pydantic import BaseModel, field_validator, conint, ConfigDict
+from enum import Enum
+
+from pydantic import BaseModel, field_validator, conint, ConfigDict, Field
 
 from src.core.exceptions import InvalidRequestDataException
 
@@ -17,6 +19,15 @@ class OrderCreateResponseModel(BaseModel):
     list_of_orderItems: list[OrderItemsResponseModel]
 
 
+class OrderResponseModel(OrderCreateResponseModel):
+    status: str
+
+class UpdatedOrderStatusResponseModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    order_id: int
+    status: str
+
+
 class OrderCreateUnsuccessfulResponseModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -27,6 +38,16 @@ class OrderCreateUnsuccessfulResponseModel(BaseModel):
 class OrderCreateRequestModel(BaseModel):
     product_id: int
     count: int = conint(ge=1)(1)
+
+
+class StatusEnum(str, Enum):
+    IN_PROGRESS = "IN PROGRESS"
+    IN_DELIVERY = "IN DELIVERY"
+    DELIVERED = "DELIVERED"
+
+
+class OrderUpdateRequestModel(BaseModel):
+    status: StatusEnum
 
 
 class ProductCreateRequestModel(BaseModel):

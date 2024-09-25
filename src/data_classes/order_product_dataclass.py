@@ -38,6 +38,7 @@ class NewOrderItemDataClass(DataClassFunctionality):
 
 
 @dataclass
-class NewSavedOrderDataClass(DataClassFunctionality):
+class OrderDataClass(DataClassFunctionality):
     order_id: int
-    list_of_orderItems: list[NewOrderItemDataClass]
+    list_of_orderItems: list[NewOrderItemDataClass] | None = None
+    status: str | None = None

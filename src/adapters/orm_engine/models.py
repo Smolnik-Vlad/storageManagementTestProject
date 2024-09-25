@@ -25,7 +25,7 @@ class Product(Base):
         CheckConstraint('count >= 0', name='check_count_positive'),
     )
 
-    order_item: Mapped['OrderItem'] = relationship(
+    order_items: Mapped[list['OrderItem']] = relationship(
         "OrderItem",
         back_populates="product",
         cascade="all, delete",
@@ -42,7 +42,7 @@ class Order(Base):
     )
     status: Mapped[Status] = mapped_column(default=Status.IN_PROGRESS)
 
-    order_item: Mapped['OrderItem'] = relationship(
+    order_items: Mapped[list['OrderItem']] = relationship(
         "OrderItem",
         back_populates="order",
         cascade="all, delete",
@@ -59,13 +59,13 @@ class OrderItem(Base):
     order_id: Mapped[int] = mapped_column(ForeignKey("order.order_id", ondelete="CASCADE"))
 
     product: Mapped[Product] = relationship(
-        back_populates="order_item",
+        back_populates="order_items",
         cascade="all, delete",
         passive_deletes=True,
         lazy="joined"
     )
     order: Mapped[Order] = relationship(
-        back_populates="order_item",
+        back_populates="order_items",
         cascade="all, delete",
         passive_deletes=True,
         lazy="joined"

@@ -13,7 +13,7 @@ class DatabaseConnectionException(CustomBaseException):
 class DatabaseException(CustomBaseException):
     def __init__(self):
         self.status_code = 500  # Internal Server Error
-        self.default_message = "Database exception. Check restrictions"
+        self.default_message = "Database exception. Smth wrong with request"
 
 
 class InvalidRequestDataException(CustomBaseException):
