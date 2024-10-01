@@ -55,7 +55,7 @@ class SQLAlchemyProductRepository(ProductRepository):
         except exc.SQLAlchemyError:
             raise DatabaseException
 
-    async def update_product_by_id(self, product_id: int, product: ProductDataClass) -> ProductDataClass:
+    async def update_product_by_id(self, product_id: int, product: ProductDataClass) -> ProductDataClass | None:
         try:
             query = (update(Product)
                      .where(Product.product_id == product_id)
@@ -64,7 +64,7 @@ class SQLAlchemyProductRepository(ProductRepository):
             res_database = await self._db_session.execute(query)
             result = res_database.scalar()
             user_result = self.__from_model_to_dataclass(result)
-            return user_result
+            return user_result or None
 
         except exc.SQLAlchemyError:
             raise DatabaseException
@@ -77,4 +77,3 @@ class SQLAlchemyProductRepository(ProductRepository):
             return [self.__from_model_to_dataclass(prod) for prod in result]
         except exc.SQLAlchemyError:
             raise DatabaseException
-

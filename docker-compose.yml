@@ -14,6 +14,29 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    container_name: storageManagement
+    ports:
+      - 8001:8001
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - ./src:/home/my_user/src/src
+
+
 volumes:
   postgres_data:
     driver: local
